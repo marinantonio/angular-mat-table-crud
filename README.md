@@ -8,7 +8,7 @@ as well.
 
 Code in action:
 
-![Alt Text](https://i.imgur.com/QcXMtzK.gifv)
+![Alt Text](https://i.stack.imgur.com/QcXMtzK.gifv)
 
 Here's a sample from my real-life application (sorry for Croatian):
 
