@@ -10,6 +10,8 @@ Code in action:
 
 ![Alt Text](https://i.imgur.com/QcXMtzK.gif)
 
+
+## REST API
 Here's a sample from my real-life application (sorry for Croatian):
 
 ![Alt Text](https://i.stack.imgur.com/atzqB.gif)
