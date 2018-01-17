@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   exampleDatabase: DataService | null;
   dataSource: ExampleDataSource | null;
   index: number;
-  id2: number;
+  id: number;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
@@ -50,6 +50,8 @@ export class AppComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
+        // After dialog is closed we're doing frontend updates
+        // For add we're just pushing a new row inside DataService
         this.exampleDatabase.dataChange.value.push(this.dataService.getDialogData());
         this.refreshTable();
       }
@@ -57,8 +59,9 @@ export class AppComponent implements OnInit {
   }
 
   startEdit(i: number, id: number, title: string, state: string, url: string, created_at: string, updated_at: string) {
+    this.id = id;
+    // index row is used just for debugging proposes and can be removed
     this.index = i;
-    this.id2 = id;
     console.log(this.index);
     const dialogRef = this.dialog.open(EditDialogComponent, {
       data: {id: id, title: title, state: state, url: url, created_at: created_at, updated_at: updated_at}
@@ -66,9 +69,9 @@ export class AppComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        // Part where we do frontend update, first you need to find record using id
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id2);
-        // Then you update that record using dialogData
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
         this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
         // And lastly refresh table
         this.refreshTable();
@@ -78,14 +81,15 @@ export class AppComponent implements OnInit {
 
   deleteItem(i: number, id: number, title: string, state: string, url: string) {
     this.index = i;
-    this.id2 = id;
+    this.id = id;
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {id: id, title: title, state: state, url: url}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id2);
+        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // for delete we use splice in order to remove single object from DataService
         this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
         this.refreshTable();
       }
@@ -93,17 +97,17 @@ export class AppComponent implements OnInit {
   }
 
 
+  // If you don't need a filter or a pagination this can be simplified, you just use code from else block
   private refreshTable() {
-    // If there's no data in filter we do update using pagination, next page or previous page
-    if (this.dataSource._filterChange.getValue() === '') {
-      if (this.dataSource._paginator.pageIndex === 0) {
-        this.dataSource._paginator.nextPage();
-        this.dataSource._paginator.previousPage();
-      } else {
-        this.dataSource._paginator.previousPage();
-        this.dataSource._paginator.nextPage();
-      }
-      // If there's something in filter, we reset it to 0 and then put back old value
+    // if there's a paginator active we're using it for refresh
+    if (this.dataSource._paginator.hasNextPage()) {
+      this.dataSource._paginator.nextPage();
+      this.dataSource._paginator.previousPage();
+      // in case we're on last page this if will tick
+    } else if (this.dataSource._paginator.hasPreviousPage()) {
+      this.dataSource._paginator.previousPage();
+      this.dataSource._paginator.nextPage();
+      // in all other cases including active filter we do it like this
     } else {
       this.dataSource.filter = '';
       this.dataSource.filter = this.filter.nativeElement.value;
@@ -163,7 +167,7 @@ export class ExampleDataSource extends DataSource<Issue> {
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
       this.filteredData = this._exampleDatabase.data.slice().filter((issue: Issue) => {
-        const searchStr = (issue.title + issue.url + issue.created_at).toLowerCase();
+        const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
         return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
       });
 
