@@ -4,6 +4,8 @@ Project showcasing my CRUD (Create, Read, Update, Delete) implementation on Angu
 with operations. This is important if you're using data from backend (some DB like MySQL) but I guess It can be used for local generated data
 as well.
 
+**Project is updated and now runs on Angular version 6 including Angular Material 6.**
+
 ## Screenshots
 
 Code in action:
@@ -25,8 +27,17 @@ You can play around with code demo [here](https://marinantonio.github.io/angular
 
 ## Refresh function
 
-Material Table updates if you do a pagination or filter update. I still find this to be a little hacky but It does job done. 
+Material Table updates if you do a pagination or filter update. You can trigger that with simple method
+as follows:
 
+```
+private refreshTable() {
+  this.paginator._changePageSize(this.paginator.pageSize);
+}
+```
+Credits to [yeager-j](https://github.com/marinantonio/angular-mat-table-crud/issues/12) for providing the refresh function
+
+Old method:
 ```
 private refreshTable() {
     // if there's a paginator active we're using it for refresh

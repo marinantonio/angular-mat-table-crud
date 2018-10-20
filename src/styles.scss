@@ -8,12 +8,14 @@ $primary: mat-palette($mat-indigo, 500);
 $accent:  mat-palette($mat-pink, 500, A200, A400);
 $warn:    mat-palette($mat-red, 500);
 
+$config: mat-typography-config();
+
 $theme: mat-light-theme($primary, $accent, $warn);
 
 @include angular-material-theme($theme);
 
 body {
-  font-family: $mat-font-family;
+  font-family: mat-font-family($config);
   font-weight: normal;
   margin: 0;
 }

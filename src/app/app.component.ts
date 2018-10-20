@@ -3,23 +3,19 @@ import {DataService} from './services/data.service';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort} from '@angular/material';
 import {Issue} from './models/issue';
-import {Observable} from 'rxjs/Observable';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
 import {AddDialogComponent} from './dialogs/add/add.dialog.component';
 import {EditDialogComponent} from './dialogs/edit/edit.dialog.component';
 import {DeleteDialogComponent} from './dialogs/delete/delete.dialog.component';
+import {BehaviorSubject, fromEvent, merge, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit {
   displayedColumns = ['id', 'title', 'state', 'url', 'created_at', 'updated_at', 'actions'];
   exampleDatabase: DataService | null;
@@ -97,8 +93,16 @@ export class AppComponent implements OnInit {
   }
 
 
-  // If you don't need a filter or a pagination this can be simplified, you just use code from else block
   private refreshTable() {
+    // Refreshing table using paginator
+    // Thanks yeager-j for tips
+    // https://github.com/marinantonio/angular-mat-table-crud/issues/12
+    this.paginator._changePageSize(this.paginator.pageSize);
+  }
+
+
+  /*   // If you don't need a filter or a pagination this can be simplified, you just use code from else block
+    // OLD METHOD:
     // if there's a paginator active we're using it for refresh
     if (this.dataSource._paginator.hasNextPage()) {
       this.dataSource._paginator.nextPage();
@@ -111,15 +115,16 @@ export class AppComponent implements OnInit {
     } else {
       this.dataSource.filter = '';
       this.dataSource.filter = this.filter.nativeElement.value;
-    }
-  }
+    }*/
+
+
 
   public loadData() {
     this.exampleDatabase = new DataService(this.httpClient);
     this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
-    Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged()
+    fromEvent(this.filter.nativeElement, 'keyup')
+      // .debounceTime(150)
+      // .distinctUntilChanged()
       .subscribe(() => {
         if (!this.dataSource) {
           return;
@@ -128,7 +133,6 @@ export class AppComponent implements OnInit {
       });
   }
 }
-
 
 export class ExampleDataSource extends DataSource<Issue> {
   _filterChange = new BehaviorSubject('');
@@ -164,25 +168,26 @@ export class ExampleDataSource extends DataSource<Issue> {
 
     this._exampleDatabase.getAllIssues();
 
-    return Observable.merge(...displayDataChanges).map(() => {
-      // Filter data
-      this.filteredData = this._exampleDatabase.data.slice().filter((issue: Issue) => {
-        const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
-        return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-      });
 
-      // Sort filtered data
-      const sortedData = this.sortData(this.filteredData.slice());
+    return merge(...displayDataChanges).pipe(map( () => {
+        // Filter data
+        this.filteredData = this._exampleDatabase.data.slice().filter((issue: Issue) => {
+          const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
+          return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+        });
 
-      // Grab the page's slice of the filtered sorted data.
-      const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-      this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
-      return this.renderedData;
-    });
+        // Sort filtered data
+        const sortedData = this.sortData(this.filteredData.slice());
+
+        // Grab the page's slice of the filtered sorted data.
+        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+        this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+        return this.renderedData;
+      }
+    ));
   }
-  disconnect() {
-  }
 
+  disconnect() {}
 
 
   /** Returns a sorted copy of the database data. */
