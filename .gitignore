@@ -40,5 +40,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-/package-lock.json
-angular_material_schematics-hTC3ds/
