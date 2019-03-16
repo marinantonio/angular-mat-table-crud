@@ -5,7 +5,7 @@ with operations. This is important if you're using data from backend (some DB li
 as well.
 
 **Project is updated and now runs on Angular version 6 including Angular Material 6.**
-For Angular 4 compatible version clone [angular_4 branch](https://github.com/marinantonio/angular-mat-table-crud/tree/angular_4)
+For Angular 4 compatible version clone [angular_4 branch](https://github.com/marinantonio/angular-mat-table-crud/tree/angular_4).
 
 ## Screenshots
 
