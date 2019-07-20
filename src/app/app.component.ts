@@ -1,7 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {DataService} from './services/data.service';
 import {HttpClient} from '@angular/common/http';
-import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import {Issue} from './models/issue';
 import {DataSource} from '@angular/cdk/collections';
 import {AddDialogComponent} from './dialogs/add/add.dialog.component';
@@ -27,9 +29,9 @@ export class AppComponent implements OnInit {
               public dialog: MatDialog,
               public dataService: DataService) {}
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('filter') filter: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild('filter',  {static: true}) filter: ElementRef;
 
   ngOnInit() {
     this.loadData();

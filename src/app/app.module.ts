@@ -4,10 +4,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {HttpClientModule} from '@angular/common/http';
-import {
-  MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
-  MatTableModule, MatToolbarModule,
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import {DataService} from './services/data.service';
 import {AddDialogComponent} from './dialogs/add/add.dialog.component';
 import {EditDialogComponent} from './dialogs/edit/edit.dialog.component';
