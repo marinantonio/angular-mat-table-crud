@@ -21,35 +21,30 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AddDialogComponent,
-    EditDialogComponent,
-    DeleteDialogComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MatDialogModule,
-    FormsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-    MatSortModule,
-    MatTableModule,
-    MatToolbarModule,
-    MatPaginatorModule,
-    ReactiveFormsModule
-  ],
-  entryComponents: [
-    AddDialogComponent,
-    EditDialogComponent,
-    DeleteDialogComponent
-  ],
-  providers: [
-    DataService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        AddDialogComponent,
+        EditDialogComponent,
+        DeleteDialogComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MatDialogModule,
+        FormsModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule,
+        MatSortModule,
+        MatTableModule,
+        MatToolbarModule,
+        MatPaginatorModule,
+        ReactiveFormsModule
+    ],
+    providers: [
+        DataService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
