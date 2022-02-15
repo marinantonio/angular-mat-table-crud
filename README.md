@@ -1,10 +1,10 @@
 # CRUD for Angular Material Table
 
-Project showcasing my CRUD (Create, Read, Update, Delete) implementation on Angular's Mat-Table. Most importantly frontend updates accordingly
+Project showcasing my CRUD (Create, Read, Update, Delete) implementation on Angular Mat-Table. Most importantly frontend updates accordingly
 with operations. This is important if you're using data from backend (some DB like MySQL) but I guess It can be used for local generated data
 as well.
 
-**Project is updated and now runs on Angular version 8 including Angular Material 8.**
+**Project is updated and now runs on Angular version 13 including Angular Material 13.**
 * For Angular 6 clone [angular_6 branch](https://github.com/marinantonio/angular-mat-table-crud/tree/angular_6).
 * For Angular 4 clone [angular_4 branch](https://github.com/marinantonio/angular-mat-table-crud/tree/angular_4).
 

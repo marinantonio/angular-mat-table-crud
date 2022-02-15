@@ -27,7 +27,7 @@ export class AddDialogComponent {
   }
 
   submit() {
-  // emppty stuff
+  // empty stuff
   }
 
   onNoClick(): void {
